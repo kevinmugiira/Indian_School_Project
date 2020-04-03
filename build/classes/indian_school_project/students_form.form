@@ -373,6 +373,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="search_txt">
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="search_txtKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="photo_select_btn">
           <Properties>

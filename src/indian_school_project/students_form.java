@@ -106,14 +106,14 @@ public class students_form extends javax.swing.JFrame {
     public void fillTable(){
         ArrayList<Student_Dean> al = retrieve_data();
         DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
-        
-        Object[] row = new Object[5];
+        model.setRowCount(0);
+        Object[] row = new Object[4];
         for (int i = 0; i < al.size(); i++) {
             row[0] = al.get(i).getId();
             row[1] = al.get(i).getName();
             row[2] = al.get(i).getFees();
             row[3] = al.get(i).getDob();
-            row[4] = al.get(i).getPhoto();
+            //row[4] = al.get(i).getPhoto();
             model.addRow(row);
             
         }  
@@ -269,6 +269,12 @@ public class students_form extends javax.swing.JFrame {
 
         jLabel10.setFont(new java.awt.Font("Noto Sans", 0, 18)); // NOI18N
         jLabel10.setText("Search Student By Name:");
+
+        search_txt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                search_txtKeyReleased(evt);
+            }
+        });
 
         photo_select_btn.setFont(new java.awt.Font("Noto Sans", 2, 18)); // NOI18N
         photo_select_btn.setForeground(new java.awt.Color(212, 88, 25));
@@ -585,6 +591,52 @@ public class students_form extends javax.swing.JFrame {
         
         showItemToField(ind);
     }//GEN-LAST:event_jTable1MouseClicked
+
+    
+    
+    //implementing the search field
+    private void search_txtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_txtKeyReleased
+        
+        ArrayList<Student_Dean> al = null;
+        al = new ArrayList<Student_Dean>();
+        String val = search_txt.getText().toString();
+        
+        try{
+            Connection conn = mysqlconnection();
+            String sql = "select * from student where name like '%"+val+"%'";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            Student_Dean stude;
+            
+            while (rs.next()) {
+                stude = new Student_Dean(rs.getInt(1), rs.getString("student_name_txt"), Float.parseFloat(rs.getString(3)), rs.getString(4), rs.getBytes("photo"));
+                al.add(stude);
+                
+                DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+                model.setRowCount(0);
+                Object[] row = new Object[4];
+                for (int i = 0; i < al.size(); i++) {
+                    row[0] = al.get(i).getId();
+                    row[1] = al.get(i).getName();
+                    row[2] = al.get(i).getFees();
+                    row[3] = al.get(i).getDob();
+                    model.addRow(row);                
+                
+                }
+            
+            
+            }
+            
+        
+        
+        }
+        catch(Exception e) {
+            System.out.println(e);
+        
+        
+        }        
+        
+    }//GEN-LAST:event_search_txtKeyReleased
 
     /**
      * @param args the command line arguments
